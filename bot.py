@@ -6,10 +6,10 @@ from servers import get_servers_data, is_valid_ip, del_server, is_valid_login, a
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('Welcome to **SSH Terminal Bot**\nInteract easily with your server through me :)', parse_mode="Markdown")
+    await update.message.reply_text('Welcome to **SSH Terminal Bot**\nInteract easily with your server', parse_mode="Markdown")
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('Please check the repository for command guides :)')
+    await update.message.reply_text('Please check the repository for command guides: \n https://github.com/ItsOrv/SSH-TelegramBot')
 
 async def add_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if isAdminUser(update.message.chat.id):
@@ -41,6 +41,8 @@ async def del_server_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
                 await update.message.reply_text(f'Server doesnt exist, try again')
     else:
         await update.message.reply_text(f'You need admin access to delete to a server!')
+
+
 async def add_server_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sender: str = update.message.chat.id
     if isAdminUser(update.message.chat.id) or isAdminUser(update.message.chat.username):
@@ -66,6 +68,8 @@ async def add_server_handler(update: Update, context: ContextTypes.DEFAULT_TYPE)
             await update.message.reply_text(f'Adding new server failed!\nPlease enter a valid IP.')
     else:
         await update.message.reply_text(f'You need admin access to add a new server!')
+
+
 async def servers_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     sender: str = update.message.chat.id
     if isAdminUser(update.message.chat.id) or isAdminUser(update.message.chat.username):
@@ -147,7 +151,7 @@ async def command_handler(update: Update, context:ContextTypes.DEFAULT_TYPE):
     print(f'>> user ({update.message.chat.first_name} {update.message.chat.last_name}) in {message_type}: "{text}"')
 
     if message_type == 'group' or message_type == 'supergroup':
-        await update.message.reply_text(f'Currently Im not able to execute commands given in groups!\nPls dm me!')
+        await update.message.reply_text(f'Currently Im not able to execute commands given in groups!')
         return
     else:
         response: str = handle_command(text)

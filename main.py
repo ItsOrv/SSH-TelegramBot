@@ -3,8 +3,8 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from bot import start_command, help_command, add_admin, add_server_handler, del_server_handler, servers_list, connect_to_server_handler, discconnect_from_server, command_handler
 
 
-TOKEN: Final= '6985915535:AAGu5GIxT6QkNymDXIc2yT9VnObsM4e5jq4'
-BOT_USERNAME : Final = "@MyBot"
+TOKEN: Final= 'xxx'
+BOT_USERNAME : Final = "@xxx"
 
 if __name__ == '__main__':
     print("Starting bot...")
@@ -23,7 +23,8 @@ if __name__ == '__main__':
     app.add_handler(MessageHandler(filters.TEXT, command_handler))
 
     # Errors
-    #app.error_handlers(error)
+    #app.error_handlers
+    #soon :)
 
     print("Starting...")
     app.run_polling(poll_interval=3)

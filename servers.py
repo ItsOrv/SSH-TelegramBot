@@ -22,73 +22,47 @@ def is_valid_ip(ip):
         return False
 
 def is_valid_login(server_ip, username, password):
-
     signal.signal(signal.SIGALRM, handler)
     signal.alarm(3)  # Set the parameter to the amount of seconds you want to wait
-
     try:
         client.connect(server_ip, username=username, password=password)
-
-        for i in range(0, 3):
-            time.sleep(1)
-
+        time.sleep(3)
         client.close()
         return True
-    except:
+    except Exception as e:
+        print(f'Connection failed: {e}')
         return False
 
 def get_servers_data():
-    global number_of_servers
     servers = []
     with open('servers.txt') as csv_file:
         print(f'>>Getting server list from {csv_file.name}')
         csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
-        for row in csv_reader:
-            current_server = []
+        for line_count, row in enumerate(csv_reader):
             if line_count > 0:
-                print(f' \t{row[0]}, {row[1]}, {row[2]}')
-                current_server.append(row[0])
-                current_server.append(row[1])
-                current_server.append(row[2])
-                current_server.append(row[3])
-                current_server.append(row[4])
-                servers.append(current_server)
-            line_count += 1
-        print(f'\t-Processed {line_count - 1} servers.')
-        number_of_servers = line_count - 1
+                servers.append(row)
+        print(f'\t-Processed {line_count} servers.')
     return servers
 
-def add_server(server_ip, username, password, sender , time):
-    global number_of_servers
-    number_of_servers += 1
-    server = [server_ip, username, password, sender, time]
+def add_server(server_ip, username, password, sender, time):
     with open('servers.txt', 'a') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',')
-        csv_writer.writerow(server)
-
+        csv_writer.writerow([server_ip, username, password, sender, time])
 
 def del_server(server_number):
-    global number_of_servers
-    number_of_servers -= 1
-    counter = 0
     with open("servers.txt", "r") as f:
         lines = f.readlines()
     with open("servers.txt", "w") as f:
-        for line in lines:
-            if counter != int(server_number):
+        for i, line in enumerate(lines):
+            if i != int(server_number):
                 f.write(line)
-            counter += 1
 
-def do_command(client , given_command):
-    output=""
-    command = given_command
-    stdin, stdout, stderr = client.exec_command(command)
-    stdout = stdout.readlines()
-    for line in stdout:
-        output = output + line
-    if output != "":
-        print(output)
-    else:
-        print("There was no output for this command")
+def do_command(client, given_command):
+    output = ""
+    try:
+        stdin, stdout, stderr = client.exec_command(given_command)
+        output = ''.join(stdout.readlines())
+    except Exception as e:
+        print(f'Command execution failed: {e}')
     return output
+

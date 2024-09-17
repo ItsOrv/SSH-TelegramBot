@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual Environment
+venv/
+
+# Sensitive files
+admins.txt
+commands.txt
+servers.txt
+.env
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
